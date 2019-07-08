@@ -15,15 +15,21 @@ class Pair:
 # '''
 class BasicHashTable:
     def __init__(self, capacity):
-        pass
+        # max length of hash table
+        self.capacity = capacity
+        # underlying data sructure
+        self.storage = [None] * capacity
 
 
 # '''
 # Fill this in.
 # Research and implement the djb2 hash function
 # '''
-def hash(string, max):
-    pass
+def hash(strings):
+    hash = 5381
+    for x in strings:
+        hash = (( hash << 5) + hash) + ord(x)
+    return hash & 0xFFFFFFFF
 
 
 # '''
@@ -32,7 +38,14 @@ def hash(string, max):
 # If you are overwriting a value with a different key, print a warning.
 # '''
 def hash_table_insert(hash_table, key, value):
-    pass
+    # 1. Compute hash
+    index = hash(key) % hash_table.capacity
+    # 2. if overwriting a value with a different key:
+    if hash_table.storage[index]:
+        # 3. Print a warning
+        print('Warning: overwriting a value with a different key is not allowed')
+    # 4. Create pair, add it
+    hash_table.storage[index] = Pair(key, value)
 
 
 # '''
@@ -41,7 +54,16 @@ def hash_table_insert(hash_table, key, value):
 # If you try to remove a value that isn't there, print a warning.
 # '''
 def hash_table_remove(hash_table, key):
-    pass
+    # 1. Compute hash
+    index = hash(key) % hash_table.capacity
+    # 2. check if a value exists:
+    if hash_table.storage[index]:
+        # 3. Set it to None
+        hash_table.storage[index] = None
+    else:
+        # 4. Print warning
+        print('Warning: the value you try to remove doesnt exist')
+        return None
 
 
 # '''
@@ -50,7 +72,17 @@ def hash_table_remove(hash_table, key):
 # Should return None if the key is not found.
 # '''
 def hash_table_retrieve(hash_table, key):
-    pass
+     # 1. Compute hash
+    index = hash(key) % hash_table.capacity
+    # 2. check if a value exists:
+    if hash_table.storage[index]:
+        # 3. Get the value
+        hash_table.storage[index].value
+    else:
+        # 4. Print warning
+        print('Warning: the value you try to retrieve doesnt exist')
+        # 5. Return None
+        return None
 
 
 def Testing():
