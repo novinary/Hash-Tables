@@ -1,3 +1,11 @@
+'''
+Hash tables in python
+- Provides data lookup by key rather than by index
+- Behaves likes a dictionary (Python) or associative array (PHP)
+- Internally uses a flat array
+- Static changing - Collisions are handled by creating a linked list where there are multiple matches
+- Each index in the internal flat array is referred to as a bucket 
+'''
 
 
 # '''
@@ -17,45 +25,60 @@ class BasicHashTable:
     def __init__(self, capacity):
         # max length of hash table
         self.capacity = capacity
-        # underlying data sructure
+        # internal flat array (bucket) where we initialise each element to None
         self.storage = [None] * capacity
 
 
 # '''
 # Fill this in.
 # Research and implement the djb2 hash function
-# '''
-def hash(strings):
+# ''
+
+
+# hash method takes key as an argument
+def hash(key, max):
+    # Initialise hash to 5381
+    # 5381 is just a number in testing which results in fewer collisions
+    # Why 33? No clue.
+    # ref:https://goodmath.scientopia.org/2013/10/20/basic-data-structures-hash-tables/
     hash = 5381
-    for x in strings:
-        hash = (( hash << 5) + hash) + ord(x)
-    return hash & 0xFFFFFFFF
+    # loop through each character in key
+    for c in key:
+        # hash will be equal to
+        hash = (hash * 33) + ord(
+            c)  # current character converted to integer or character code
+    return hash % max
 
 
 # '''
 # Fill this in.
+
 
 # If you are overwriting a value with a different key, print a warning.
 # '''
+# Insert method takes in hash_table, key and value
 def hash_table_insert(hash_table, key, value):
-    # 1. Compute hash
-    index = hash(key) % hash_table.capacity
+    new_pair = Pair(key, value)
+    # 1. Find the index we're going to in the internal array
+    # To do this we use our hash function
+    index = hash(key, hash_table.capacity)
     # 2. if overwriting a value with a different key:
     if hash_table.storage[index]:
         # 3. Print a warning
-        print('Warning: overwriting a value with a different key is not allowed')
+        print(
+            'Warning: overwriting a value with a different key is not allowed')
     # 4. Create pair, add it
-    hash_table.storage[index] = Pair(key, value)
+    hash_table.storage[index] = new_pair.value
 
 
 # '''
 # Fill this in.
+
 
 # If you try to remove a value that isn't there, print a warning.
 # '''
 def hash_table_remove(hash_table, key):
-    # 1. Compute hash
-    index = hash(key) % hash_table.capacity
+    index = hash(key, hash_table.capacity)
     # 2. check if a value exists:
     if hash_table.storage[index]:
         # 3. Set it to None
@@ -69,15 +92,16 @@ def hash_table_remove(hash_table, key):
 # '''
 # Fill this in.
 
+
 # Should return None if the key is not found.
 # '''
 def hash_table_retrieve(hash_table, key):
-     # 1. Compute hash
-    index = hash(key) % hash_table.capacity
+    # 1. Compute hash
+    index = hash(key, hash_table.capacity)
     # 2. check if a value exists:
     if hash_table.storage[index]:
-        # 3. Get the value
-        hash_table.storage[index].value
+        # 3. Return the value
+        return hash_table.storage[index]
     else:
         # 4. Print warning
         print('Warning: the value you try to retrieve doesnt exist')
