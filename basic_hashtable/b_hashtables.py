@@ -40,14 +40,15 @@ def hash(key, max):
     # Initialise hash to 5381
     # 5381 is just a number in testing which results in fewer collisions
     # Why 33? No clue.
+    # two impletations for djb2 using either /33 or <<5
     # ref:https://goodmath.scientopia.org/2013/10/20/basic-data-structures-hash-tables/
     hash = 5381
     # loop through each character in key
     for c in key:
-        # hash will be equal to
-        hash = (hash * 33) + ord(
-            c)  # current character converted to integer or character code
-    return hash % max
+        # take the original hash and left shift by 5 and add hash and add character
+        hash = ((hash << 5) + hash) + ord(
+            c)  # make the `c` into a unicode
+    return hash % max  # mod hash into max
 
 
 # '''
@@ -58,11 +59,12 @@ def hash(key, max):
 # '''
 # Insert method takes in hash_table, key and value
 def hash_table_insert(hash_table, key, value):
-    new_pair = Pair(key, value)
     # 1. Find the index we're going to in the internal array
     # To do this we use our hash function
     index = hash(key, hash_table.capacity)
-    # 2. if overwriting a value with a different key:
+    # create a new pair using key and value
+    new_pair = Pair(key, value)
+    # 2. if there is already a pair 
     if hash_table.storage[index]:
         # 3. Print a warning
         print(
