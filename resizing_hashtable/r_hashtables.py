@@ -71,7 +71,45 @@ def hash_table_insert(hash_table, key, value):
 # If you try to remove a value that isn't there, print a warning.
 # '''
 def hash_table_remove(hash_table, key):
-    pass
+    hashedKey = hash(key, hash_table.capacity)
+    # set the index 
+    index = hash_table.storage[hashedKey]
+    # check if there's anything at the index
+    if not index:
+        print(f'Warning: the key you're trying to remove doesnt exist')
+    else:
+        # loop through the pairs until we find the key
+        current_pair = hash_table.storage[hashedKey]
+        # check if it's the first pair in the list
+        if current_pair.key == key:
+            # check if it's the only pair at that index
+            if current_pair.next == None:
+                hash_table.storage[hashedKey] = None
+            # else set the new starter pair
+            else:
+                hash_table.storage[hashedKey] = current_pair.next
+            return None
+        # loop through the pairs if it's not the first pair
+        while current_pair.next:
+            # check if the destination pair is at the next position
+            if current_pair.next == key:
+                # Assign the destination pair to a variable
+                desitination_pair = current_pair.next
+                # if the destination pair has a next pair, set that to the current pair
+                if destination_pair.next:
+                    current_pair.next = destination_pair.next
+                # else set the current next pair to None
+                else:
+                    current_pair.next = None
+                return None
+            # set the next pair as current_pair.next for loop continuous
+            current_pair = current_pair.next
+        # check if the last pair in the list matches the key
+        if current_pair.key == key:
+            # set the key to 0 
+            current_pair.key = None
+        else:
+            print(f'Warning: the key you're trying to remove doesnt exist')
 
 
 # '''
@@ -122,20 +160,20 @@ def hash_table_resize(hash_table):
 def Testing():
     ht = HashTable(2)
 
-    hash_table_insert(ht, "line_1", "Tiny hash table")
-    hash_table_insert(ht, "line_2", "Filled beyond capacity")
-    hash_table_insert(ht, "line_3", "Linked list saves the day!")
+    hash_table_insert(ht, 'line_1', 'Tiny hash table')
+    hash_table_insert(ht, 'line_2', 'Filled beyond capacity')
+    hash_table_insert(ht, 'line_3', 'Linked list saves the day!')
 
-    print(hash_table_retrieve(ht, "line_1"))
-    print(hash_table_retrieve(ht, "line_2"))
-    print(hash_table_retrieve(ht, "line_3"))
+    print(hash_table_retrieve(ht, 'line_1'))
+    print(hash_table_retrieve(ht, 'line_2'))
+    print(hash_table_retrieve(ht, 'line_3'))
 
     old_capacity = len(ht.storage)
     ht = hash_table_resize(ht)
     new_capacity = len(ht.storage)
 
-    print("Resized hash table from " + str(old_capacity)
-          + " to " + str(new_capacity) + ".")
+    print('Resized hash table from ' + str(old_capacity)
+          + ' to ' + str(new_capacity) + '.')
 
 
 Testing()
