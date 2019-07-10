@@ -80,16 +80,15 @@ def hash_table_remove(hash_table, key):
 # Should return None if the key is not found.
 # '''
 def hash_table_retrieve(hash_table, key):
-    # create a new pair using key and value
-    linkedPair = LinkedPair(key, value)
+    hashedKey = hash(key, hash_table.capacity)
     # set the index 
-    index = hash_table.storage[ linkedPair]
+    index = hash_table.storage[hashedKey]
     # check if there's anything at the index
     if not index:
         return None
     else:
         # loop through the pairs until we find the key
-        current_pair = hash_table.storage[linkedPair]
+        current_pair = hash_table.storage[hashedKey]
         while current_pair.next:
             if current_pair.key == key:
                 return current_pair.value
